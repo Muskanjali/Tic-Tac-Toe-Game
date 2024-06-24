@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tic tac toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(tictactoe.jpg);
+        }
+
+        .container {
+            max-width: 300px;
+            height: fit-content;
+            margin: 0 auto;
+            margin-top:10%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #010616;
+            color:#fff;
+            box-shadow: 4px 5px 4px 5px inset rgb(92, 81, 241),
+            4px 5px 4px 5px inset rgb(72, 40, 95);
+        }
+
+        h1 {
+            color:#fff;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 4px;
+            margin: 20px 0;
+        }
+
+        .cell {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            background-color: #eee;
+            font-size: 24px;
+            border: 2px solid pink;
+            cursor: pointer;
+            border-radius: 8px;
+            color: black;
+        }
+
+        #message {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        #reset {
+            padding: 5px;
+            background-color: #d30d0d;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 80px;
+            height: 28px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Tic_Tac_Toe</h1>
+        <div id="board">
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+            <button class="cell" onclick="makeMove(this)"></button>
+        </div>
+        <p id="message"></p>
+        <button id="reset" onclick="resetGame()">Reset</button>
+    </div>
+    <script>
+        let currentPlayer = "X";
+        let gameOver = false;
+        function makeMove(cell) {
+            if (cell.textContent === "" && !gameOver) {
+                cell.textContent = currentPlayer;
+                if (checkWinner()) {
+                    document.getElementById("message").textContent = `Player${currentPlayer}wins!`;
+                    gameOver = true;
+                }
+                else if (isBoardFull()) {
+                    document.getElementById("message").textContent = "It's a draw!";
+                    gameOver = true;
+                } else {
+                    currentPlayer = currentPlayer === "X" ? "O" : "X";
+                }
+            }
+        }
+        function checkWinner() {
+            const cells = document.querySelectorAll(".cell");
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],//rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],//columns
+                [0, 4, 8], [2, 4, 6]//diagonals
+            ];
+            for (const combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (cells[a].textContent && cells[a].textContent === cells[b].textContent && cells[a].textContent === cells[c].textContent) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function isBoardFull() {
+            const cells = document.querySelectorAll(".cell");
+            for (const cell of cells) {
+                if (cell.textContent === "") {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function resetGame() {
+            const cells = document.querySelectorAll(".cell");
+            for (const cell of cells) {
+                cell.textContent = "";
+            }
+            document.getElementById("message").textContent = "";
+            currentPlayer = "X";
+            gameOver = false;
+        }
+        resetGame();
+    </script>
+</body>
+
+</html>
